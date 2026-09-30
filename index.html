@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>PokeClicker</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<header class="topbar">
+  <div class="logo">⚡ PokeClicker</div>
+
+  <nav>
+    <button onclick="scrollToSection('map')">🗺️ Map</button>
+    <button onclick="scrollToSection('pokedex')">📖 Pokédex</button>
+    <button onclick="scrollToSection('shop')">🛒 Shop</button>
+    <button onclick="scrollToSection('quests')">📜 Quests</button>
+    <button onclick="openAdmin()">🔐 Admin</button>
+  </nav>
+</header>
+
+<section class="hero">
+  <img id="heroPokemon"
+       src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/25.png"
+       alt="Pokémon">
+
+  <h1>POKECLICKER</h1>
+  <p>Fange wilde Pokémon und werde zum Pokémon-Meister!</p>
+</section>
+
+<section class="stats">
+
+  <div class="stat">
+    <span>🪙</span>
+    <small>Coins</small>
+    <strong id="coins">0</strong>
+  </div>
+
+  <div class="stat">
+    <span>🔴</span>
+    <small>Pokébälle</small>
+    <strong id="balls">10</strong>
+  </div>
+
+  <div class="stat">
+    <span>🐾</span>
+    <small>Gefangen</small>
+    <strong id="caught">0</strong>
+  </div>
+
+  <div class="stat">
+    <span>⚔️</span>
+    <small>Siege</small>
+    <strong id="wins">0</strong>
+  </div>
+
+</section>
+
+<main>
+
+  <!-- MAP -->
+
+  <section id="map" class="section">
+
+    <h2>🗺️ Viridian Forest</h2>
+
+    <div class="map">
+
+      <div class="cloud cloud1"></div>
+      <div class="cloud cloud2"></div>
+
+      <div class="mountain mountain1"></div>
+      <div class="mountain mountain2"></div>
+
+      <div class="water"></div>
+      <div class="road"></div>
+      <div class="grass"></div>
+
+      <div class="house">
+        <div class="roof"></div>
+        <div class="door"></div>
+      </div>
+
+      <div class="map-title">
+        🌳 Wilde Pokémon
+      </div>
+
+      <img id="wildPokemon"
+           class="wild-pokemon"
+           src=""
+           alt="Wildes Pokémon">
+
+    </div>
+
+    <div class="info-box">
+      🎯 Klicke auf ein wildes Pokémon, um einen Kampf zu starten.
+      Schwäche es und benutze anschließend einen Pokéball!
+    </div>
+
+  </section>
+
+
+  <!-- POKEDEX -->
+
+  <section id="pokedex" class="section">
+
+    <h2>📖 Dein Pokédex</h2>
+
+    <div class="panel">
+
+      <p>
+        Gefangen:
+        <strong id="pokedexCount">0</strong>
+      </p>
+
+      <div id="pokedexGrid" class="pokedex-grid"></div>
+
+    </div>
+
+  </section>
+
+
+  <!-- ATTACKEN -->
+
+  <section class="section">
+
+    <h2>⚔️ Attacken</h2>
+
+    <div class="panel attacks">
+
+      <button onclick="useOutsideAttack(10)">
+        ⚡ Donnerblitz
+        <small>10 Schaden</small>
+      </button>
+
+      <button onclick="useOutsideAttack(20)">
+        🔥 Feuersturm
+        <small>20 Schaden</small>
+      </button>
+
+      <button onclick="useOutsideAttack(30)">
+        💧 Hydropumpe
+        <small>30 Schaden</small>
+      </button>
+
+      <button onclick="useOutsideAttack(40)">
+        🌿 Solarstrahl
+        <small>40 Schaden</small>
+      </button>
+
+    </div>
+
+  </section>
+
+
+  <!-- SHOP -->
+
+  <section id="shop" class="section">
+
+    <h2>🛒 Shop</h2>
+
+    <div class="shop-grid">
+
+      <div class="shop-card">
+        <div class="big-icon">🔴</div>
+        <h3>Pokéball</h3>
+        <p>50 Coins</p>
+        <button onclick="buyBall()">Kaufen</button>
+      </div>
+
+      <div class="shop-card">
+        <div class="big-icon">🔵</div>
+        <h3>Superball</h3>
+        <p>150 Coins</p>
+        <button onclick="buyGreatBall()">Kaufen</button>
+      </div>
+
+      <div class="shop-card">
+        <div class="big-icon">🧪</div>
+        <h3>Trank</h3>
+        <p>75 Coins</p>
+        <button onclick="buyPotion()">Kaufen</button>
+      </div>
+
+    </div>
+
+  </section>
+
+
+  <!-- QUESTS -->
+
+  <section id="quests" class="section">
+
+    <h2>📜 Quests</h2>
+
+    <div class="quests">
+
+      <div class="quest">
+        <h3>🔴 Pokémon fangen</h3>
+        <p id="catchQuestText">0 / 5</p>
+        <div class="progress">
+          <div id="catchProgress"></div>
+        </div>
+        <small>Belohnung: 500 Coins</small>
+      </div>
+
+      <div class="quest">
+        <h3>⚔️ Kämpfe gewinnen</h3>
+        <p id="winQuestText">0 / 10</p>
+        <div class="progress">
+          <div id="winProgress"></div>
+        </div>
+        <small>Belohnung: 10 Pokébälle</small>
+      </div>
+
+      <div class="quest">
+        <h3>🪙 Coins sammeln</h3>
+        <p id="coinQuestText">0 / 1000</p>
+        <div class="progress">
+          <div id="coinProgress"></div>
+        </div>
+        <small>Belohnung: 10 Pokébälle</small>
+      </div>
+
+    </div>
+
+  </section>
+
+
+  <!-- ADMIN -->
+
+  <section class="section">
+
+    <h2>🔐 Admin</h2>
+
+    <div class="panel admin-area">
+
+      <button class="admin-open" onclick="openAdmin()">
+        🔐 Admin-Menü öffnen
+      </button>
+
+      <div id="adminPanel" class="admin-panel">
+
+        <h3>👑 Admin Panel</h3>
+
+        <input
+          id="adminCode"
+          type="password"
+          placeholder="Admin-Code">
+
+        <button onclick="loginAdmin()">
+          🔓 Einloggen
+        </button>
+
+        <div id="adminTools" class="admin-tools">
+
+          <button onclick="adminCoins()">
+            🪙 +10.000 Coins
+          </button>
+
+          <button onclick="adminBalls()">
+            🔴 +100 Pokébälle
+          </button>
+
+          <button onclick="adminAllPokemon()">
+            🐾 Alle Pokémon fangen
+          </button>
+
+          <button onclick="resetGame()">
+            🗑️ Spiel zurücksetzen
+          </button>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </section>
+
+</main>
+
+
+<!-- KAMPF -->
+
+<div id="battleOverlay" class="overlay">
+
+  <div class="battle">
+
+    <button class="close" onclick="runAway()">✕</button>
+
+    <h2 id="battleTitle">
+      Wildes Pokémon
+    </h2>
+
+    <img id="battlePokemon"
+         src=""
+         alt="Pokémon">
+
+    <div class="hp-text">
+      ❤️ <span id="hpText">100 / 100</span>
+    </div>
+
+    <div class="hp">
+      <div id="hpBar"></div>
+    </div>
+
+    <div class="battle-buttons">
+
+      <button onclick="battleAttack(10)">
+        ⚡ Donnerblitz
+      </button>
+
+      <button onclick="battleAttack(20)">
+        🔥 Feuersturm
+      </button>
+
+      <button onclick="battleAttack(30)">
+        💧 Hydropumpe
+      </button>
+
+      <button onclick="throwBall()">
+        🔴 Pokéball
+      </button>
+
+      <button onclick="throwGreatBall()">
+        🔵 Superball
+      </button>
+
+      <button onclick="usePotion()">
+        🧪 Trank
+      </button>
+
+    </div>
+
+    <p id="battleMessage">
+      Schwäche das Pokémon!
+    </p>
+
+  </div>
+
+</div>
+
+
+<footer>
+  ⚡ PokeClicker
+  <br>
+  Fange sie alle!
+</footer>
+
+<script src="script.js"></script>
+
+</body>
+</html>
